@@ -11,6 +11,10 @@ def sample_normal(mean,cov,n_samples):
 		samples.append(mean + l@np.random.normal(0,1,dim))
 	return samples
 
+def woodbury_inverse(ai,b,ci,d):
+	m = np.linalg.inv(ci+d@ai@b)
+	return ai-ai@b@m@d@ai
+
 def sgp_samples(x,y,m,t,sls,sfs,noise,n_samples=1):
 
 	'''Sample from sparse GP
@@ -43,7 +47,8 @@ def sgp_samples(x,y,m,t,sls,sfs,noise,n_samples=1):
 	kmt = ktm.T
 
 	mean = ktm@qm_inv@kmx@gameyeinv@y
-	cov = ktt - ktm@(kmm_inv - qm_inv)@kmt + noise*np.identity(len(t))
+	#cov = ktt - ktm@(kmm_inv - qm_inv)@kmt + noise*np.identity(len(t))
+	cov = ktt - ktm@(kmm_inv - qm_inv)@kmt + .000001*np.identity(len(t))
 
 	samples = sample_normal(mean,cov,n_samples)
 

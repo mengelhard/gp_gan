@@ -77,7 +77,7 @@ def sparse_gp(xn,yn,xm,x,sigsq,siglsq,sigfsq):
 
 	#print(kmminv)
 
-	gam_diag = [sigfsq-kmn[:,i].T@kmm_inv@kmn[:,i] for i in range(N)]
+	gam_diag = [sigfsq-kmn[:,i].T@kmminv@kmn[:,i] for i in range(N)]
 	gam = np.diag(gam_diag)
 	gameyeinv = np.diag([1/(g+sigsq) for g in gam_diag])
 
